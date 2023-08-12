@@ -1,4 +1,4 @@
-import {stream} from "../index";
+import {stream} from "@cjparser/stream";
 
 import {strict} from 'assert'
 
