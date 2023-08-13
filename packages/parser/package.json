@@ -1,11 +1,11 @@
 {
-  "name": "@cjparser/stream",
+  "name": "@cjparser/parser",
   "version": "0.0.0",
-  "description": "process chunk stream ",
+  "description": "> TODO: description",
   "author": "Agitator <1482084534@qq.com>",
   "homepage": "https://github.com/Code-Agitator/CJParser#readme",
   "license": "ISC",
-  "main": "index.ts",
+  "main": "lib/parser.ts",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
@@ -22,7 +22,7 @@
     "url": "git+https://github.com/Code-Agitator/CJParser.git"
   },
   "scripts": {
-    "test": "npx mocha require ts-node/register/transpile-only __tests__/stream.test.ts"
+    "test": "npx mocha require ts-node/register/transpile-only __tests__/parser.test.ts"
   },
   "bugs": {
     "url": "https://github.com/Code-Agitator/CJParser/issues"
