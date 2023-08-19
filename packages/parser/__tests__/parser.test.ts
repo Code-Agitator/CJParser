@@ -1,5 +1,14 @@
 import {DEFAULT_DELIMITERS, guessDelimiterFromCsv, guessLineEndingCharFromCsv} from "../lib/parserHelper";
 import assert from "assert";
+import {Parser} from "../lib/parser";
+import fs from "fs";
+
+const testCaseFilePath = __dirname + "/../../../document/titanic.csv";
+const titanicStr = fs.readFileSync(testCaseFilePath, 'utf8');
+
+describe("parser", () => {
+
+})
 
 describe("parserHelper", () => {
     describe("parserHelper.guessLineEndingCharFromCsv", () => {

@@ -1,7 +1,7 @@
 import {ChunkModel, StreamerConfig, StreamerEventHandler} from "./types";
 import {Readable} from "stream";
 
-abstract class Streamer<T, R> {
+export abstract class Streamer<T, R> {
     config: StreamerConfig
     content: T
     handler?: StreamerEventHandler<R>
@@ -26,7 +26,7 @@ abstract class Streamer<T, R> {
 }
 
 
-class StringStreamer extends Streamer<string, string> {
+export class StringStreamer extends Streamer<string, string> {
 
     constructor(content: string, config?: StreamerConfig, handler?: StreamerEventHandler<string>) {
         super(content, config, handler);
@@ -48,7 +48,7 @@ class StringStreamer extends Streamer<string, string> {
 
 }
 
-class ReadableStreamer extends Streamer<Readable, string> {
+export class ReadableStreamer extends Streamer<Readable, string> {
 
     pauseInternal: boolean
     bufferCache: string[]
@@ -120,7 +120,7 @@ export default {
         new StringStreamer(content, config, handler).read()
     },
     readableStreamer: (content: Readable, config?: StreamerConfig, handler?: StreamerEventHandler<string>) => {
-            new ReadableStreamer(content, config, handler).read()
+        new ReadableStreamer(content, config, handler).read()
     },
 }
 

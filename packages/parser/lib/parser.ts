@@ -1,15 +1,20 @@
 import {ParserConfig, ParserResult} from "./types";
 import {guessDelimiterFromCsv, guessLineEndingCharFromCsv} from "./parserHelper";
+import {Readable} from "stream";
+import {Streamer} from "@cjparser/stream";
 
 
-class Parser {
+export class Parser {
     private config: ParserConfig
+    private datasource: string | Readable
 
-    constructor(config: ParserConfig) {
+    constructor(datasource: string | Readable, config: ParserConfig = {mode: 'default'}) {
         this.config = config
+        this.datasource = datasource
     }
 
-    public parse(content: string, ignoreLastLine: boolean = true): ParserResult {
+
+    protected parseChunk(content: string, ignoreLastLine: boolean = true): ParserResult {
         const lineEnd = this.config.lineEnd ?? guessLineEndingCharFromCsv(content)
         const delimiter = this.config.delimiter ?? guessDelimiterFromCsv(content)
         const result: ParserResult = {
