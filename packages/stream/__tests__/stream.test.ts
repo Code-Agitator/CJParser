@@ -32,7 +32,7 @@ describe("Streamer", function () {
                 }
             })
         })
-        deepEqual(result, chunksForTestCase)
+        expect(result).toStrictEqual(chunksForTestCase)
     })
     it("ReaderStreamer", async function () {
         const result = await new Promise<string>((resolve, reject) => {
@@ -49,7 +49,7 @@ describe("Streamer", function () {
                 }
             })
         })
-        equal(result, titanicStr)
+        expect(result).toEqual(titanicStr)
     })
 })
 
