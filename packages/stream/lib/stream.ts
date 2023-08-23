@@ -70,7 +70,7 @@ export class ReadableStreamer extends Streamer<Readable, string> {
         return {data: data ?? "", isLastChunk: !this.hasNext()};
     }
 
-    private onStreamData = bindFunction((chunk: any) => {
+    private onStreamData =(chunk: any) => {
         try {
             if (chunk instanceof String) {
                 this.bufferCache.push(chunk as string)
@@ -84,9 +84,9 @@ export class ReadableStreamer extends Streamer<Readable, string> {
         } catch (err) {
             this.handler?.onError && this.handler?.onError(err)
         }
-    }, this)
+    }
 
-    private onStreamEnd = bindFunction(() => {
+    private onStreamEnd = () => {
         try {
             this.streamCleanUp()
             this.streamEnd = true
@@ -94,7 +94,7 @@ export class ReadableStreamer extends Streamer<Readable, string> {
         } catch (err) {
             this.handler?.onError && this.handler?.onError(err)
         }
-    }, this)
+    }
 
     private streamCleanUp() {
         this.content.removeListener('data', this.onStreamData)
@@ -102,9 +102,9 @@ export class ReadableStreamer extends Streamer<Readable, string> {
         this.content.removeListener('error', this.onStreamError)
     }
 
-    private onStreamError = bindFunction(() => {
+    private onStreamError = () => {
         this.handler?.onError && this.handler?.onError(new Error())
-    }, this)
+    }
 
     read(handler?: StreamerEventHandler<string>) {
         this.content.on('data', this.onStreamData)
@@ -115,19 +115,15 @@ export class ReadableStreamer extends Streamer<Readable, string> {
 }
 
 
-export default {
-    stringStreamer: (content: string, config?: StreamerConfig, handler?: StreamerEventHandler<string>) => {
-        new StringStreamer(content, config, handler).read()
-    },
-    readableStreamer: (content: Readable, config?: StreamerConfig, handler?: StreamerEventHandler<string>) => {
-        new ReadableStreamer(content, config, handler).read()
-    },
+export const stream = (content: string | Readable, config?: StreamerConfig, handler?: StreamerEventHandler<string>) => {
+    if (content instanceof String) {
+        new StringStreamer(content as string, config, handler).read()
+        return
+    } else {
+        new ReadableStreamer(content as Readable, config, handler).read()
+        return;
+    }
 }
 
 
-function bindFunction(f: Function, self: any) {
-    return function () {
-        f.apply(self, arguments);
-    };
-}
 

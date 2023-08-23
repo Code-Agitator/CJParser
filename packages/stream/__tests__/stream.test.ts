@@ -1,5 +1,4 @@
-import {deepEqual, equal} from 'assert'
-import Streamer from "../lib/stream";
+import {stream} from "../lib/stream";
 import * as fs from "fs";
 
 
@@ -20,7 +19,7 @@ describe("Streamer", function () {
         const result = await new Promise<string[]>((resolve, reject) => {
             let chunkNum = 0
             const result: string[] = []
-            Streamer.stringStreamer(testCase, {
+            stream(testCase, {
                 chunkSize: 4
             }, {
                 onChunk(chunk) {
@@ -37,7 +36,7 @@ describe("Streamer", function () {
     it("ReaderStreamer", async function () {
         const result = await new Promise<string>((resolve, reject) => {
             let result: string = ""
-            Streamer.readableStreamer(fs.createReadStream(testCaseFilePath), {encoding: 'utf-8'}, {
+            stream(fs.createReadStream(testCaseFilePath), {encoding: 'utf-8'}, {
                 onChunk(chunk) {
                     result += chunk.data;
                 },
