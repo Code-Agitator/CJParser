@@ -10,7 +10,10 @@ export interface ParserConfig {
      */
     mode?: ParserMode
     headerCustomizer?: HeaderCustomizer
+    cellsCustomizer?: CellCustomizer
+    onLine?: OnLine
     streamConfig?: StreamerConfig
+    onFinish?: Function
 }
 
 export interface ParserResult {
@@ -26,6 +29,6 @@ export interface CellCustomizer {
     (cell: string, header: string, index: number): string
 }
 
-export interface onLine {
+export interface OnLine {
     (line: string[]): void
 }

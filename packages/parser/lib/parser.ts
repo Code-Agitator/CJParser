@@ -6,14 +6,15 @@ import {stream} from "@cjparser/stream";
 
 export class Parser {
     private config: ParserConfig
-    private datasource: string | Readable
+    private readonly datasource: string | Readable
     private partOfLine: string
-    private headers: string[] | undefined
+    private headers: string[]
 
     constructor(datasource: string | Readable, config: ParserConfig = {mode: 'default'}) {
         this.config = config
         this.datasource = datasource
         this.partOfLine = ''
+        this.headers = []
     }
 
 
@@ -55,15 +56,24 @@ export class Parser {
                         }
                     }
                 }
-                if(lines){
-
+                if (lines) {
+                    for (let i = 0; i < lines.length; i++) {
+                        const line = lines[i]
+                        if (this.config.cellsCustomizer) {
+                            for (let j = 0; j < line.length; j++) {
+                                line[j] = this.config.cellsCustomizer(line[j], this.headers[j], j)
+                            }
+                        }
+                        if (this.config.onLine) {
+                            this.config.onLine(line)
+                        }
+                    }
                 }
-
-
-
             },
-            onFinish() {
-
+            onFinish: () => {
+                if (this.config.onFinish) {
+                    this.config.onFinish()
+                }
             }
         })
     }
