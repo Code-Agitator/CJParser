@@ -12,6 +12,7 @@ export interface ParserConfig {
     headerCustomizer?: HeaderCustomizer
     cellsCustomizer?: CellCustomizer
     onLine?: OnLine
+    onHeaders?: OnHeaders
     streamConfig?: StreamerConfig
     onFinish?: Function
 }
@@ -31,4 +32,8 @@ export interface CellCustomizer {
 
 export interface OnLine {
     (line: string[]): void
+}
+
+export interface OnHeaders {
+    (headers: string[]): void
 }

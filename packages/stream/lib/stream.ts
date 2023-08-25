@@ -30,6 +30,7 @@ export class StringStreamer extends Streamer<string, string> {
 
     constructor(content: string, config?: StreamerConfig, handler?: StreamerEventHandler<string>) {
         super(content, config, handler);
+        this.config.chunkSize = this.config.chunkSize ?? content.length
     }
 
     hasNext(): boolean {
@@ -38,7 +39,7 @@ export class StringStreamer extends Streamer<string, string> {
 
     protected nextChunk(): ChunkModel<string> {
         const chunkContent = this.content?.substring(0, this.config?.chunkSize)
-        this.content = this.content?.substring(this.config?.chunkSize ?? this.content?.length - 1)
+        this.content = this.content?.substring(chunkContent.length)
         return {
             data: chunkContent ?? "",
             isLastChunk: !this.hasNext()
@@ -70,7 +71,7 @@ export class ReadableStreamer extends Streamer<Readable, string> {
         return {data: data ?? "", isLastChunk: !this.hasNext()};
     }
 
-    private onStreamData =(chunk: any) => {
+    private onStreamData = (chunk: any) => {
         try {
             if (chunk instanceof String) {
                 this.bufferCache.push(chunk as string)
@@ -116,7 +117,7 @@ export class ReadableStreamer extends Streamer<Readable, string> {
 
 
 export const stream = (content: string | Readable, config?: StreamerConfig, handler?: StreamerEventHandler<string>) => {
-    if (content instanceof String) {
+    if (typeof content === 'string') {
         new StringStreamer(content as string, config, handler).read()
         return
     } else {

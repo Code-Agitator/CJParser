@@ -47,13 +47,16 @@ export class Parser {
                 const result = this.parseChunk(this.partOfLine + chunk.data, !chunk.isLastChunk)
                 this.partOfLine = result.partOfLine ?? ''
                 const lines = result.data;
-                if (!this.headers && lines.length > 0) {
+                if (this.hasHeaders() && lines.length > 0) {
                     this.headers = lines[0]
                     lines.shift()
                     if (this.config.headerCustomizer) {
                         for (let i = 0; i < this.headers.length; i++) {
                             this.headers[i] = this.config.headerCustomizer(this.headers[i], i)
                         }
+                    }
+                    if (this.config.onHeaders) {
+                        this.config.onHeaders(this.headers)
                     }
                 }
                 if (lines) {
@@ -79,6 +82,9 @@ export class Parser {
     }
 
 
+    private hasHeaders() {
+        return this.headers.length <= 0;
+    }
 }
 
 
